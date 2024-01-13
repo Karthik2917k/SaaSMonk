@@ -37,13 +37,33 @@ export const getMovies = async (req: Request, res: Response) => {
         ? {
             name: {
               contains: search as string,
-              mode: 'insensitive',
+              mode: "insensitive",
             },
           }
         : {},
     });
 
-    return res.status(200).json({ ok: true, data:movies });
+    return res.status(200).json({ ok: true, data: movies });
+  } catch (error: any) {
+    return res.status(400).json({ ok: false, message: error.message });
+  }
+};
+
+/**
+ * Retrieves a list of movies from the database.
+ *
+ * @param req - Express Request object.
+ * @param res - Express Response object to send the HTTP response.
+ * @returns A JSON response containing the list of movies or an error message.
+ */
+export const getMoviesNames = async (req: Request, res: Response) => {
+  try {
+    const { search } = req.query;
+    const movies = await prisma.movie.findMany({
+      select: { name: true, id: true },
+    });
+
+    return res.status(200).json({ ok: true, data: movies });
   } catch (error: any) {
     return res.status(400).json({ ok: false, message: error.message });
   }

@@ -5,6 +5,7 @@ import {
   deleteMovie,
   getMovies,
   getMovie,
+  getMoviesNames,
 } from "../controllers/movie.controller";
 
 // Create a new Express Router instance
@@ -28,6 +29,11 @@ app.delete("/delete/:id", (req: Request, res: Response) => {
 // Route for fetching all movies
 app.get("/", (req: Request, res: Response) => {
   return getMovies(req, res);
+});
+
+// Route for fetching all movies Names
+app.get("/names", (req: Request, res: Response) => {
+  return getMoviesNames(req, res);
 });
 
 // Route for fetching a specific movie by ID
