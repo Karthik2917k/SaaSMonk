@@ -74,7 +74,7 @@ export const updateReview = async (req: Request, res: Response) => {
       res.status(400).json({ ok: false, message: "Movie Id not found" });
     }
     delete data["id"];
-    await prisma.review.update({ where: { id: reviewId }, data });
+    await prisma.review.update({ where: { id: reviewId }, data:{...data,Rating:Number(data.Rating)} });
 
     const movies = await prisma.review.findMany({
       where: { movieId: id },
