@@ -8,6 +8,7 @@ import { MdDelete } from "react-icons/md";
 import Modal from "../Modal/Modal";
 import Navbar from "../Navbar/Navbar";
 import { NewMovieProps } from "../Navbar/Navbar.types";
+import { Link } from "react-router-dom";
 const initMovieState: NewMovieProps = {
   name: "",
   Release: "",
@@ -21,13 +22,14 @@ const Movies = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [movie, setMovie] = useState<string>("");
   const getMovies = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const url = `${import.meta.env.VITE_SERVER_URL}/movies?search=${movie}`;
       const movies = await axios.get(url);
       setMovies(movies.data.data);
       setLoading(false);
     } catch (err) {
+      setLoading(false);
       console.log(err);
     }
   };
@@ -110,17 +112,16 @@ const Movies = () => {
           <div className="w-11/12 m-auto my-10">Loading....</div>
         ) : (
           <div className="grid md:grid-cols-3 gap-5">
-            {movies.length>0 ?
+            {movies.length > 0 ? (
               movies.map((el: movieTypes) => (
-                <div
-                  key={el.id}
-                  className="bg-[#e0defd] p-5 flex flex-col gap-2 text-lg"
-                >
-                  <p>{el.name}</p>
-                  <p className="italic text-slate-700">
-                    Released:{formatDate(el.Release)}
-                  </p>
-                  <p className="font-bold">Rating: {el.Average}/10</p>
+                <div key={el.id} className="bg-[#e0defd] p-5 ">
+                  <Link className="flex flex-col gap-2 text-lg" to={`/reviews/${el.id}?${el.name}`}>
+                    <p>{el.name}</p>
+                    <p className="italic text-slate-700">
+                      Released:{formatDate(el.Release)}
+                    </p>
+                    <p className="font-bold">Rating: {el.Average?el.Average:0}/10</p>
+                  </Link>
                   <div className="my-1 flex justify-end gap-2">
                     <BiSolidEdit
                       className="text-gray-500 hover:text-gray-600 w-5 h-5 cursor-pointer"
@@ -132,7 +133,10 @@ const Movies = () => {
                     />
                   </div>
                 </div>
-              )):<div>Looking Movie is Not Found</div>}
+              ))
+            ) : (
+              <div>Looking Movie is Not Found</div>
+            )}
           </div>
         )}
         {isUpdateMovieModalOpen && (
