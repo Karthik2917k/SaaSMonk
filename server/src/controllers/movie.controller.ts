@@ -32,7 +32,7 @@ export const newMovie = async (req: Request, res: Response) => {
 export const getMovies = async (req: Request, res: Response) => {
   try {
     const movies = await prisma.movie.findMany();
-    return res.status(200).json({ ok: true, date: movies });
+    return res.status(200).json({ ok: true, data: movies });
   } catch (error: any) {
     return res.status(400).json({ ok: false, message: error.message });
   }
