@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import movieRoutes from "./routes/movie.route";
 import movieReviews from "./routes/review.route";
-
+import cors from "cors"
 // Load environment variables from .env file
 dotenv.config();
 
@@ -12,6 +12,7 @@ const app = express();
 // Middleware to parse JSON and URL-encoded data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 // Use movieRoutes for handling movie-related routes
 app.use("/movies", movieRoutes);
