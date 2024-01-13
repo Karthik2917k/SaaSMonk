@@ -10,3 +10,12 @@ body {
 	font-family: "Poppins", sans-serif;
 	padding: 0;
 }
+
+
+::-webkit-scrollbar {
+  width: 0;
+}
+
+body {
+  scrollbar-width: none;
+}
