@@ -31,8 +31,19 @@ export const newMovie = async (req: Request, res: Response) => {
  */
 export const getMovies = async (req: Request, res: Response) => {
   try {
-    const movies = await prisma.movie.findMany();
-    return res.status(200).json({ ok: true, data: movies });
+    const { search } = req.query;
+    const movies = await prisma.movie.findMany({
+      where: search
+        ? {
+            name: {
+              contains: search as string,
+              mode: 'insensitive',
+            },
+          }
+        : {},
+    });
+
+    return res.status(200).json({ ok: true, data:movies });
   } catch (error: any) {
     return res.status(400).json({ ok: false, message: error.message });
   }
@@ -52,7 +63,7 @@ export const getMovie = async (req: Request, res: Response) => {
       where: { id },
       include: { reviews: true },
     });
-    return res.status(200).json({ ok: true, date: movie });
+    return res.status(200).json({ ok: true, data: movie });
   } catch (error: any) {
     return res.status(400).json({ ok: false, message: error.message });
   }
